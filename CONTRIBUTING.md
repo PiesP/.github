@@ -5,6 +5,10 @@ Describe the user-visible problem, reproduction steps, expected result, and the
 smallest relevant change. Keep unrelated cleanup and dependency upgrades out of
 behavior fixes. Include the checks you ran and any skipped or unavailable scope.
 
+For automation changes, follow the [ownership, command catalog and migration
+rules](MAINTENANCE_POLICY.md#automation-ownership). Use the target project's
+existing documentation and command surfaces for its implementation details.
+
 Product-specific requirements remain in each repository: browser compatibility
 and emitted artifacts, Windows file safety and source-bound candidate evidence,
 and supported game builds and translation source hashes. Never bypass those
