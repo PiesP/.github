@@ -110,6 +110,24 @@ narrowly justified exception with a review trigger. Record tested and landed
 source identities, actual commands/results and unexecuted checks. Use small
 reviewable changes; maintenance closure does not establish release acceptance.
 
+## UX review
+
+Use the shared
+[`Quiet Instruments interaction and visual contract`](https://github.com/PiesP/browser-core/blob/master/docs/DESIGN.md)
+to review whether users can understand the current state, identify the next
+action, and complete core tasks with a keyboard. Respect supported accessibility
+preferences and keep completion, cancellation cleanup, errors, and recovery
+feedback consistent with actual behavior. Product copy, layout, renderer tests,
+and safety authority stay in their owning repositories.
+
+Apply design principles through the target platform's conventions. A platform
+or safety exception needs a specific rationale and a review trigger; mechanical
+copying of Apple behavior is not required. DarkReNamer retains its Cancel-default
+final confirmation and proposal-only reset, without filesystem Undo. Record
+rendered and runtime evidence separately from token/unit checks and human or
+assistive-technology acceptance. Use existing product gates rather than adding
+a common release matrix or central UI automation system.
+
 ## Product exceptions
 
 | Repository | Preserved boundary |
