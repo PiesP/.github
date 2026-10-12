@@ -30,9 +30,9 @@ this page. Keep connection details, VM identities, and raw results private.
    desktop session.
 4. Verify the intended host and guest identities, trusted SSH host key and
    executable, authenticated RDP endpoint and account, and that both transports
-   refer to the same expected interactive session. Check the expected session
-   GUID and actual desktop state. A failed identity, trust, or session check
-   blocks the run; administrative transport is used only when explicitly
+   refer to the intended guest and account. Check the expected VM GUID,
+   interactive session ID, and actual desktop state. A failed identity, trust,
+   or session check blocks the run; administrative transport is used only when explicitly
    selected and supported by the owning contract.
 5. Run a bounded preflight for required tools, writable owned output, protected
    inputs, declared resource/disk headroom, display geometry and DPI capability,
