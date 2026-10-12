@@ -143,3 +143,10 @@ Live protection and product-specific release controls belong to the owning
 repository. A policy edit here does not apply settings. Document a proposed
 exception with its repository, reason, scope and review date in the maintainer's
 review record before an authorized change to live settings.
+
+## Shared Windows validation
+
+Follow the [prepared-VM operating contract](WINDOWS_VALIDATION.md) for shared
+environment preparation, exclusive desktop access, private evidence, and
+recovery. Each project's linked Windows contract controls its scenarios,
+verdicts, and release acceptance.

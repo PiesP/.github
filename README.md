@@ -13,6 +13,10 @@ settings sync or GitHub enforcement mechanism. Each project retains its own CI,
 CODEOWNERS, Dependabot rules, formatter, security policy, release permissions,
 Windows safety rules, and game compatibility checks.
 
+[`WINDOWS_VALIDATION.md`](WINDOWS_VALIDATION.md) records the shared prepared-VM
+operating contract. Each project's Windows guide owns its product checks and
+release evidence; the VM controller remains local to the maintainer workspace.
+
 The maintainer's read-only `check.py` inventory and detailed `policy.json` stay
 in the local workspace. They are not part of this repository. Run the
 inventory there to compare declared settings with the current GitHub state;
