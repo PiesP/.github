@@ -48,6 +48,15 @@ candidate GUI runs with its verified linked-medium token. Do not elevate the
 candidate GUI to make a check pass. Use existing trusted staging, verifier, and
 cleanup boundaries. Keep browser debugging and fixture servers on guest loopback,
 and transfer only declared, verified assets.
+For managed validation RDP sessions, disable host drive, clipboard, printer,
+Plug and Play device, dynamic drive and device, port, smart-card,
+point-of-sale device, and audio-input redirection before connecting, and
+verify the per-connection settings by readback. Clipboard use inside the guest
+remains available; transfer declared test assets through the existing SSH
+bundle path. This leaves the authenticated RDP profile, TLS/CredSSP checks,
+credentials, and machine policies in place. The COM-based host helper uses
+Windows PowerShell 5.1; PowerShell 7+ serves the separate SSH remoting path.
+Select the host shell for that helper without a system-wide PowerShell pin.
 Ordinary browser runs use fresh task-owned profiles with no host/default profile,
 login, cookie, or authentication import. Keep browsers muted where the selected
 profile requires it; a muted run gives no audible-output evidence.
