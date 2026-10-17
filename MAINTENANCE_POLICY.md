@@ -20,13 +20,19 @@ constraints can justify a smaller adapter in another language.
 
 | Repository | Primary automation language | Reviewable exceptions |
 | --- | --- | --- |
-| `browser-core` | TypeScript | JavaScript that selects the runtime before installation, or preserves an existing bootstrap compatibility contract. |
-| `wasm-motion-converter` | TypeScript | Minimal launch adapters and Windows validation JavaScript while its portable-runtime contract requires it. Preserve media/profile validation. |
-| `xcom-enhanced-gallery` | TypeScript | Minimal launch adapters and Windows validation JavaScript while its portable-runtime contract requires it. |
-| `yt-live-chat-overlay` | TypeScript | Minimal launch adapters and Windows validation JavaScript while its portable-runtime contract requires it. Retire Python validators/downloaders only after verified equivalence. |
-| `DarkReNamer` | Python for portable tooling; PowerShell for Windows, Hyper-V and UI integration | Bounded embedded C# native interop; a retained Bash diagnostic needs a specific caller/platform justification. |
+| `browser-core` | TypeScript | Two minimal `.mjs` bootstrap entrypoints run before the selected Node toolchain; review them when runner bootstrap or supported Node versions change. The consumer-impact classifier runs as dependency-free TypeScript after Node selection. |
+| `wasm-motion-converter` | TypeScript | The release `.mjs` selector runs before Node setup. Windows TypeScript runs under the qualified portable Node with its complete import closure and media/profile evidence; review that contract when Node or bundled assets change. Retain the browser service worker as a separate runtime contract. |
+| `xcom-enhanced-gallery` | TypeScript | The release `.mjs` selector and Git hook guards run before pinned Node setup. Windows validation uses TypeScript; native PowerShell and bounded embedded C# retain Windows API operations. Review these adapters if the native APIs or execution stage change. |
+| `yt-live-chat-overlay` | TypeScript | Pre-runtime selectors/hooks, browser-direct fixture JavaScript, and native Windows PowerShell retain their execution contracts. Host Python verifies manager ZIPs because Node has no standard ZIP reader and no reviewed pinned Node ZIP reader is qualified; tests create separate Python subprocesses, and scanner-container Python validates SARIF without a qualified Node stage. Revisit with a reviewed pinned ZIP reader and adversarial archive/transport plus Windows evidence, or with a qualified scanner Node stage preserving scan-exit/SARIF trust. |
+| `DarkReNamer` | Python for portable tooling; PowerShell for Windows, Hyper-V and UI integration | Windows PowerShell retains compiled guest CRC32 and bounded CLR/native interop and stream operations; review when journal compatibility, native APIs or handle/stream contracts change. CI retains trusted Bash source classification and tree guards before tool setup; review if a trusted pre-tool runtime is established. The Wine gallery was retired. |
 | `peglin-korean-revised` | Python | Minimal launch adapters or bounded inline Python where extraction would weaken trusted publication validation. |
 | `.github` | Documentation only | No automation runtime or executable tooling. |
+
+Direct Windows TypeScript execution requires the owning repository's qualified
+portable Node, complete declared import closure, and source-bound VM evidence.
+Record deferred and unverified work separately from implemented and verified
+dispositions. A blocked check must name the missing capability, responsible
+owner, and resolution trigger; unavailable or pending evidence is not a pass.
 
 Record each exception in the owning command catalog or review record: its exact
 entrypoint, required execution stage/platform, preserved contract, verification,
