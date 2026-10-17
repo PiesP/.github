@@ -117,19 +117,20 @@ reviewable changes; maintenance closure does not establish release acceptance.
 ### Vite+ migration and mutation-testing retirement
 
 Vite+ is the selected integrated toolchain for applicable JS/TS development,
-formatting, linting, testing and building. The migration is being coordinated in
+formatting, linting, testing and building. Implementation and repository-owned
+evidence are tracked in
 [`browser-core` #69](https://github.com/PiesP/browser-core/issues/69),
 [`yt-live-chat-overlay` #256](https://github.com/PiesP/yt-live-chat-overlay/issues/256),
 [`xcom-enhanced-gallery` #323](https://github.com/PiesP/xcom-enhanced-gallery/issues/323),
 and [`wasm-motion-converter` #346](https://github.com/PiesP/wasm-motion-converter/issues/346).
-These links describe planned implementation, not completed migration. Each
-repository's manifest, lockfile and contributor command catalog own its exact
+Each repository's manifest, lockfile and contributor command catalog own its exact
 selected version, commands, retained-tool reasons and verification evidence.
-The identified [Vite+ 1.3.0 release](https://github.com/voidzero-dev/vite-plus/releases/tag/v1.3.0)
-does not waive verification of the chosen stable version or its actual npm
-release-age eligibility before installation.
+Vite+ owns its managed Vite, Vitest, coverage and core-tool versions. Keep Vite+
+update proposals visible for reviewed, aligned toolchain changes; exclude only
+ordinary version-update proposals for managed components. Preserve security
+alerts and security updates for those components.
 
-The three applications are retiring Stryker and mutation-score gates. Maintained
+The three applications have retired Stryker and mutation-score gates. Maintained
 unit tests, coverage, type checks, lint, browser checks, artifact checks,
 security checks and release-source checks remain. Coverage is not equivalent to
 mutation testing. Preserve assertion strength, intended test discovery,
@@ -146,11 +147,10 @@ criteria.
 Keep compatible Node/pnpm bootstrap and package-manager authority. Vite+ does
 not require moving every setting into one file, bundling `browser-core`, or
 enabling task caching. If runtime ownership changes, migrate all bootstrap,
-release and deployment readers together. `browser-core` is the preferred pilot;
-apply validated decisions to YTLC, XEG and WMC as their integration complexity
-increases. A shared provider change must land and be verified before a consumer
-adopts its new pin. Record old/new `packages/core` gitlinks and shared Action
-commit SHAs, with rollback, independently. Keep `browser-core` private with raw
+release and deployment readers together. A shared provider change must land and
+be verified before a consumer adopts its new pin. Record old/new `packages/core`
+gitlinks and shared Action commit SHAs, with rollback, independently. Keep
+`browser-core` private with raw
 TypeScript exports, no required distribution build or publication, and its
 supported Node matrix. Consumers retain privileged workflows, source eligibility,
 release/deployment decisions and required-check ownership. Their existing
