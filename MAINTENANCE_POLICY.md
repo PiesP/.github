@@ -23,18 +23,20 @@ constraints can justify a smaller adapter in another language.
 | `browser-core` | TypeScript | Two minimal `.mjs` bootstrap entrypoints run before the selected Node toolchain; review them when runner bootstrap or supported Node versions change. The consumer-impact classifier runs as dependency-free TypeScript after Node selection. |
 | `wasm-motion-converter` | TypeScript | The release `.mjs` selector runs before Node setup. Windows TypeScript runs under the qualified portable Node with its complete import closure and media/profile evidence; review that contract when Node or bundled assets change. Retain the browser service worker as a separate runtime contract. |
 | `xcom-enhanced-gallery` | TypeScript | The release `.mjs` selector and Git hook guards run before pinned Node setup. Windows validation uses TypeScript; native PowerShell and bounded embedded C# retain Windows API operations. Review these adapters if the native APIs or execution stage change. |
-| `yt-live-chat-overlay` | TypeScript | Pre-runtime selectors/hooks, browser-direct fixture JavaScript, and native Windows PowerShell retain their execution contracts. Host ZIP preparation and its Python subprocess tests remain pending [YT #269](https://github.com/PiesP/yt-live-chat-overlay/issues/269): qualify transport, adversarial archive handling, staging, callers and source-bound Windows installation. Scanner-container SARIF validation remains pending [YT #270](https://github.com/PiesP/yt-live-chat-overlay/issues/270): qualify an immutable YT-owned Node Action while preserving scan-exit and upload trust. Semgrep's own Python runtime is a separate third-party requirement. |
+| `yt-live-chat-overlay` | TypeScript | Pre-runtime selectors/hooks, browser-direct fixture JavaScript, and native Windows PowerShell retain their execution contracts. [YT #269](https://github.com/PiesP/yt-live-chat-overlay/issues/269) qualified host ZIP preparation and its test callers under pinned Node 26.9.0, including actual Windows manager installation. [YT #270](https://github.com/PiesP/yt-live-chat-overlay/issues/270) qualified the immutable YT-owned Node 24 SARIF Action in the scanner container. Review these contracts when the ZIP API, store package, transport, runtime, callers or scanner/upload interface changes. Semgrep's own Python runtime remains a separate third-party requirement. |
 | `DarkReNamer` | Python for portable tooling; PowerShell for Windows, Hyper-V and UI integration | Windows PowerShell retains compiled guest CRC32 and bounded CLR/native interop and stream operations; review when journal compatibility, native APIs or handle/stream contracts change. CI retains trusted Bash source classification and tree guards before tool setup; review if a trusted pre-tool runtime is established. The Wine gallery was retired. |
 | `peglin-korean-revised` | Python | Minimal launch adapters or bounded inline Python where extraction would weaken trusted publication validation. |
 | `.github` | Documentation only | No automation runtime or executable tooling. |
 
 YT's pinned Node 26.9.0 includes an [early-development ZIP API](https://nodejs.org/download/release/v26.9.0/docs/api/zlib.html#class-zlibzipentry).
-API availability alone does not qualify a host-helper replacement. A deliberately
-qualified Node 26.9 host command must remain distinct from ordinary Node 22/24
-compatibility and the Windows guest runtime. Likewise, a JavaScript Action can
-use GitHub's runner-provided Node 24 without establishing `node` in the scanner
-container shell's `PATH`; qualify the actual container Action path, not only a
-loader experiment. Keep each migration's complete caller/import/fixture closure,
+The host command is qualified against direct HTTPS transport, hostile archives,
+staging failures, complete callers and source-bound Windows manager installation.
+Keep that Node 26.9 host command distinct from ordinary Node 22/24 compatibility
+and the Windows guest runtime. Older supported Node versions can import the
+module, but preparation rejects them before network or filesystem mutation.
+The SARIF Action uses GitHub's runner-provided Node 24 in the actual scanner
+container; this does not establish `node` in the container shell's `PATH`.
+Keep each migration's complete caller/import/fixture closure,
 immutable Action ownership, meaningful negative controls and independent runtime
 gitlink unchanged unless its owning task requires a verified update.
 
