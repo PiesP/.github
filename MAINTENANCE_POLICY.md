@@ -28,12 +28,14 @@ constraints can justify a smaller adapter in another language.
 | `peglin-korean-revised` | Python | Minimal launch adapters or bounded inline Python where extraction would weaken trusted publication validation. |
 | `.github` | Documentation only | No automation runtime or executable tooling. |
 
-YT's pinned Node 26.9.0 includes an [early-development ZIP API](https://nodejs.org/download/release/v26.9.0/docs/api/zlib.html#class-zlibzipentry).
-The host command is qualified against direct HTTPS transport, hostile archives,
-staging failures, complete callers and source-bound Windows manager installation.
-Keep that Node 26.9 host command distinct from ordinary Node 22/24 compatibility
-and the Windows guest runtime. Older supported Node versions can import the
-module, but preparation rejects them before network or filesystem mutation.
+YT's host ZIP preparer requires the exact `volta.node` runtime declared in its
+[manifest](https://github.com/PiesP/yt-live-chat-overlay/blob/master/package.json).
+Its [`prepare-userscript-manager.ts` contract](https://github.com/PiesP/yt-live-chat-overlay/blob/master/validation/windows/README.md#installed-application-profiles)
+records the early-development ZIP API and verification scope for that runtime.
+The Node 26.9.0 qualification above remains historical evidence. Keep host ZIP
+preparation distinct from ordinary Node 22/24 compatibility and the Windows
+guest runtime. Older supported Node versions can import the module, but
+preparation rejects them before network or filesystem mutation.
 The SARIF Action uses GitHub's runner-provided Node 24 in the actual scanner
 container; this does not establish `node` in the container shell's `PATH`.
 Keep each migration's complete caller/import/fixture closure,
