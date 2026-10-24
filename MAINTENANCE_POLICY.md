@@ -65,6 +65,21 @@ entrypoint with a final command, owner and verified behavior. Private helpers
 belong with the command they serve. Reuse DarkReNamer's
 existing tooling-test and bundle registries; do not create a parallel registry.
 
+For browser projects, distinguish single-run tests, persistent watch mode,
+static checks, ordinary verification and full verification in that local catalog.
+State the suites and artifact targets each command includes, plus required
+fixtures, browsers and other inputs. Shared names such as `verify` do not imply
+equal coverage across projects; a successful command establishes only its
+documented, executed scope. Browser, prepared-VM, installed-application and release
+acceptance require their owning checks and evidence. Preserve intentional
+command differences rather than making every verification command run all suites.
+Consult the command documentation in
+[`browser-core`](https://github.com/PiesP/browser-core/blob/master/README.md#development),
+[`dropconvert`](https://github.com/PiesP/wasm-motion-converter/blob/master/CONTRIBUTING.md#command-catalog),
+[`XCOM`](https://github.com/PiesP/xcom-enhanced-gallery/blob/master/CONTRIBUTING.md#command-catalog)
+and [`YT`](https://github.com/PiesP/yt-live-chat-overlay/blob/master/CONTRIBUTING.md#command-catalog)
+for the current implementations and guarantees.
+
 Inventory these surfaces at the implementation's recorded base commit:
 
 - `scripts/`, distributable automation/Actions and `.github/scripts`;
