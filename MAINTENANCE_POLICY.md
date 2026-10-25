@@ -149,6 +149,47 @@ narrowly justified exception with a review trigger. Record tested and landed
 source identities, actual commands/results and unexecuted checks. Use small
 reviewable changes; maintenance closure does not establish release acceptance.
 
+### Dependency security monitoring
+
+Keep ordinary Dependabot version updates, Dependency Graph alerts/security
+updates, and the existing OSV checks distinct. GitHub's
+[20 October 2026 support announcement](https://github.blog/changelog/2026-10-20-dependabot-now-supports-npm-12-pnpm-11-and-12-and-bun-1-4/)
+documents a limitation for pnpm 12 lockfiles containing two YAML documents:
+version updates work, while the graph can omit dependencies and therefore
+cannot create their alerts or security updates; existing alerts may close.
+Keep those features enabled, but verify actual graph ingestion before claiming
+coverage. An empty or closed alert list is not a clean dependency assessment.
+
+The four JavaScript repositories retain their existing weekly and manual
+security workflows. Their OSV path scans both lockfile documents, including the
+native package-manager bootstrap graph, project direct/transitive dependencies,
+and the checked-out core submodule where applicable. Review the actual scan and
+report steps, job summary, and uploaded SARIF in GitHub Code Scanning. A
+successful changed-path job that skipped scanning is not a fresh assessment;
+reuse an earlier scan only after comparing its relevant inputs. Retrieval,
+scanner, parsing, and incomplete-result failures remain failed checks.
+
+When a finding applies, track it in the owning repository and submit a reviewed
+remediation PR promptly rather than waiting for the ordinary version-update
+batch or an automatic security PR. Trace the resolved dependency path, including
+transitive dependencies and the package-manager graph. Update the responsible
+parent/toolchain or use a narrowly justified override with its owning checks.
+For Vite+-managed components, review an aligned Vite+ update or document the
+specific component remedy; ordinary update filters do not exempt security work.
+Keep toolchain ownership, frozen installs, and the 1,440-minute release-age rule;
+any urgent security exception follows the existing narrowly documented approval
+process.
+
+Implementation and result-validation owners remain in
+[core's OSV guidance](https://github.com/PiesP/browser-core/blob/master/automation/README.md#osv-result-validation)
+and the consumer workflow guides for
+[dropconvert](https://github.com/PiesP/wasm-motion-converter/blob/master/docs/osv-workflow.md),
+[XCOM](https://github.com/PiesP/xcom-enhanced-gallery/blob/master/docs/osv-workflow.md),
+and [YT](https://github.com/PiesP/yt-live-chat-overlay/blob/master/docs/osv-workflow.md).
+Recheck this qualification after a GitHub ingestion-support announcement or a
+material lockfile-format, scanner, or helper change. Keep dated scan/input
+matrices in the review record rather than treating package counts as invariants.
+
 ### Vite+ migration and mutation-testing retirement
 
 Vite+ is the selected integrated toolchain for applicable JS/TS development,
@@ -162,8 +203,9 @@ Each repository's manifest, lockfile and contributor command catalog own its exa
 selected version, commands, retained-tool reasons and verification evidence.
 Vite+ owns its managed Vite, Vitest, coverage and core-tool versions. Keep Vite+
 update proposals visible for reviewed, aligned toolchain changes; exclude only
-ordinary version-update proposals for managed components. Preserve security
-alerts and security updates for those components.
+ordinary version-update proposals for managed components. Keep security alerts
+and security updates enabled for those components, subject to the actual
+[monitoring coverage and remediation path](#dependency-security-monitoring).
 
 The three applications have retired Stryker and mutation-score gates. Maintained
 unit tests, coverage, type checks, lint, browser checks, artifact checks,
