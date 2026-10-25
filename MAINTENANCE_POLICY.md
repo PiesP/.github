@@ -97,6 +97,32 @@ actual language. Keep this inventory in documentation or the PR record rather
 than a new permanent inventory system. File/LOC/test-count reduction and
 unmeasured performance claims are not acceptance criteria.
 
+### Comparable footprint evidence
+
+Name the delivered artifact and measurement unit before comparing size. Keep
+executable code, resources and debug symbols distinct from installed files and
+compressed archives; distinguish browser initial downloads from deferred assets.
+Source-only libraries and documentation-only projects may have no independently
+delivered binary. Select measurements in the owning project rather than imposing
+a shared byte budget or report format.
+
+Bind observations to source revisions, relevant dependency/tool versions,
+target/configuration, and input/output hashes or equivalent artifact identity.
+Distinguish downloaded release assets from source rebuilds. A historical delta
+does not establish its cause: hold relevant inputs constant for attribution or
+explain confounders. Missing historical artifacts or toolchains remain unavailable
+evidence, not zero-byte baselines.
+
+Preserve a compact baseline/result table, reproduction command, material
+tradeoffs and implement/retain/defer decision in the owning PR, issue or existing
+documentation. This keeps the reasoning reviewable after temporary artifacts
+expire. A supported retain decision is valid; fewer bytes alone do not establish
+correctness, compatibility or user benefit. For project-owned examples, see
+[Peglin's unchanged player artifacts after compile-reference reduction](https://github.com/PiesP/peglin-korean-revised/issues/46#issuecomment-6381107084)
+and [dropconvert's separate initial and first-use loading costs](https://github.com/PiesP/wasm-motion-converter/issues/329#issuecomment-6191454690).
+Product-specific runtime acceptance and release/deployment authority remain with
+each repository; this guidance adds no executable gate or recurring audit.
+
 ### Implementation and migration
 
 Keep small modules grouped by purpose, using the primary language and standard
