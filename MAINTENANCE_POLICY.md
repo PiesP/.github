@@ -21,15 +21,15 @@ constraints can justify a smaller adapter in another language.
 | Repository | Primary automation language | Reviewable exceptions |
 | --- | --- | --- |
 | `browser-core` | TypeScript | Two minimal `.mjs` bootstrap entrypoints run before the selected Node toolchain; review them when runner bootstrap or supported Node versions change. The consumer-impact classifier runs as dependency-free TypeScript after Node selection. |
-| `wasm-motion-converter` | TypeScript | The release `.mjs` selector runs before Node setup. Windows TypeScript runs under the qualified portable Node with its complete import closure and media/profile evidence; review that contract when Node or bundled assets change. Retain the browser service worker as a separate runtime contract. |
-| `xcom-enhanced-gallery` | TypeScript | The release `.mjs` selector and Git hook guards run before pinned Node setup. Windows validation uses TypeScript; native PowerShell and bounded embedded C# retain Windows API operations. Review these adapters if the native APIs or execution stage change. |
-| `yt-live-chat-overlay` | TypeScript | Pre-runtime selectors/hooks, browser-direct fixture JavaScript, and native Windows PowerShell retain their execution contracts. [YT #269](https://github.com/PiesP/yt-live-chat-overlay/issues/269) qualified host ZIP preparation and its test callers under pinned Node 26.9.0, including actual Windows manager installation. [YT #270](https://github.com/PiesP/yt-live-chat-overlay/issues/270) qualified the immutable YT-owned Node 24 SARIF Action in the scanner container. Review these contracts when the ZIP API, store package, transport, runtime, callers or scanner/upload interface changes. Semgrep's own Python runtime remains a separate third-party requirement. |
+| `wasm-motion-converter` | TypeScript | Protected release provenance uses pinned `setup-project` before dependency-free `verify-source.ts`; no release `.mjs` selector remains. Windows TypeScript runs under the qualified portable Node with its complete import closure and media/profile evidence; review that contract when Node or bundled assets change. Retain the browser service worker as a separate runtime contract. |
+| `xcom-enhanced-gallery` | TypeScript | Protected release provenance uses pinned `setup-project` before dependency-free `verify-source.ts`; no release `.mjs` selector remains. Bash Git hook guards run independently of CI setup. Windows validation uses TypeScript; native PowerShell and bounded embedded C# retain Windows API operations. Review these adapters if the native APIs or execution stage change. |
+| `yt-live-chat-overlay` | TypeScript | Dependency-free preinstall checks, Git hooks, browser-direct fixture JavaScript, and native Windows PowerShell retain their execution contracts. [YT #269](https://github.com/PiesP/yt-live-chat-overlay/issues/269) qualified host ZIP preparation and its test callers under historical Node 26.9.0, including actual Windows manager installation. [YT #270](https://github.com/PiesP/yt-live-chat-overlay/issues/270) qualified the immutable YT-owned Node 24 SARIF Action in the scanner container. Review these contracts when the ZIP API, store package, transport, runtime, callers or scanner/upload interface changes. Semgrep's own Python runtime remains a separate third-party requirement. |
 | `DarkReNamer` | Python for portable tooling; PowerShell for Windows, Hyper-V and UI integration | Windows PowerShell retains compiled guest CRC32 and bounded CLR/native interop and stream operations; review when journal compatibility, native APIs or handle/stream contracts change. CI retains trusted Bash source classification and tree guards before tool setup; review if a trusted pre-tool runtime is established. The Wine gallery was retired. |
 | `peglin-korean-revised` | Python | Minimal launch adapters or bounded inline Python where extraction would weaken trusted publication validation. |
 | `.github` | Documentation only | No automation runtime or executable tooling. |
 
-YT's host ZIP preparer requires the exact `volta.node` runtime declared in its
-[manifest](https://github.com/PiesP/yt-live-chat-overlay/blob/master/package.json).
+YT's host ZIP preparer requires the exact current `.node-version` runtime
+declared in its [runtime pin](https://github.com/PiesP/yt-live-chat-overlay/blob/master/.node-version).
 Its [`prepare-userscript-manager.ts` contract](https://github.com/PiesP/yt-live-chat-overlay/blob/master/validation/windows/README.md#installed-application-profiles)
 records the early-development ZIP API and verification scope for that runtime.
 The Node 26.9.0 qualification above remains historical evidence. Keep host ZIP
@@ -233,6 +233,17 @@ stages; the program tracker stays open until final reconciliation and does not
 block child implementation while open.
 Each repository's manifest, lockfile and contributor command catalog own its exact
 selected version, commands, retained-tool reasons and verification evidence.
+The final ownership contract for `browser-core`, dropconvert, XCOM and YT assigns
+environment selection, frozen installs, routine tasks, native formatting and
+linting, static and type-import cycle checks, Node and Browser Mode tests, and
+integrated type checking to Vite+. Its selected pnpm backend and narrowly scoped
+managed-Vite peer allowances remain implementation components. The reviewed
+`setup-project` Action at `38cd1cb18c9c37e57e8b53a98e811450bb1a18fc`,
+consumer runtime `packages/core` gitlinks at
+`b783358a3dd3bf167cf89a6df550166ded36dbd1`, and each scanner helper's
+immutable source pin have separate ownership. Record actual source revisions,
+hosted checks and prepared-VM results in the program tracker and child issues;
+this policy does not mark pending stages as passed.
 Vite+ owns its managed Vite, Vitest, coverage and core-tool versions. Keep Vite+
 update proposals visible for reviewed, aligned toolchain changes; exclude only
 ordinary version-update proposals for managed components. Keep security alerts
