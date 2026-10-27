@@ -150,8 +150,9 @@ workflows, hooks, subprocess tests, type/lint/unused-code checks, changed-path
 routing, bundle/profile inventories, generated pins, help and documentation
 together. Preserve public commands where practical. Remove transitional wrappers
 and duplicate handwritten implementations after acceptance, retaining only
-justified public compatibility adapters. Do not introduce `tsx`, `ts-node`, a
-task DSL, universal runner or new package/service solely to consolidate scripts.
+justified public compatibility adapters. Use Vite+'s task runner for the browser
+projects; do not introduce `tsx`, `ts-node`, another task DSL, universal runner
+or new package/service solely to consolidate scripts.
 
 Establish positive and negative contract fixtures before migrating classifiers,
 downloaders or security validators. Preserve conservative routing, scanner
@@ -216,15 +217,20 @@ Recheck this qualification after a GitHub ingestion-support announcement or a
 material lockfile-format, scanner, or helper change. Keep dated scan/input
 matrices in the review record rather than treating package counts as invariants.
 
-### Vite+ migration and mutation-testing retirement
+### Vite+ ownership and accepted policy reductions
 
 Vite+ is the selected integrated toolchain for applicable JS/TS development,
-formatting, linting, testing and building. Implementation and repository-owned
-evidence are tracked in
+formatting, linting, testing, type checking, runtime selection, installation and
+routine task orchestration. The complete implementation and final reconciliation
+are tracked in [the Vite+ migration program](https://github.com/PiesP/.github/issues/29)
+and its linked project issues. The earlier adoption and mutation retirement in
 [`browser-core` #69](https://github.com/PiesP/browser-core/issues/69),
 [`yt-live-chat-overlay` #256](https://github.com/PiesP/yt-live-chat-overlay/issues/256),
 [`xcom-enhanced-gallery` #323](https://github.com/PiesP/xcom-enhanced-gallery/issues/323),
-and [`wasm-motion-converter` #346](https://github.com/PiesP/wasm-motion-converter/issues/346).
+and [`wasm-motion-converter` #346](https://github.com/PiesP/wasm-motion-converter/issues/346)
+remain historical implementation evidence. Adopt this policy before the child
+stages; the program tracker stays open until final reconciliation and does not
+block child implementation while open.
 Each repository's manifest, lockfile and contributor command catalog own its exact
 selected version, commands, retained-tool reasons and verification evidence.
 Vite+ owns its managed Vite, Vitest, coverage and core-tool versions. Keep Vite+
@@ -233,33 +239,76 @@ ordinary version-update proposals for managed components. Keep security alerts
 and security updates enabled for those components, subject to the actual
 [monitoring coverage and remediation path](#dependency-security-monitoring).
 
-The three applications have retired Stryker and mutation-score gates. Maintained
-unit tests, coverage, type checks, lint, browser checks, artifact checks,
-security checks and release-source checks remain. Coverage is not equivalent to
-mutation testing. Preserve assertion strength, intended test discovery,
-TypeScript project boundaries, coverage file sets and threshold semantics,
-supported browsers and emitted artifact contracts. Retire superseded tool
-dependencies, configuration, commands, workflows, update restrictions and
-tool-specific tests after tracing their callers; an unexplained dual-tool
-arrangement is incomplete migration work. Retain exact TypeScript project checks,
-standalone Playwright, Knip/dpdm, design/i18n/version/artifact/source guards or
-narrowly required CSS lint where their named purpose and behavior are verified.
-Unmeasured speedups, deletion counts and added test volume are not acceptance
-criteria.
+Use the following final ownership and explicitly reduced policies:
 
-Keep compatible Node/pnpm bootstrap and package-manager authority. Vite+ does
-not require moving every setting into one file, bundling `browser-core`, or
-enabling task caching. If runtime ownership changes, migrate all bootstrap,
-release and deployment readers together. A shared provider change must land and
-be verified before a consumer adopts its new pin. Record old/new `packages/core`
-gitlinks and shared Action commit SHAs, with rollback, independently. Keep
-`browser-core` private with raw
-TypeScript exports, no required distribution build or publication, and its
-supported Node matrix. Consumers retain privileged workflows, source eligibility,
-release/deployment decisions and required-check ownership. Their existing
+- Prefer Vite+ native lint and formatting. Retire residual Biome and low-value
+  restrictions without native equivalents; document accepted diagnostic and
+  prevention differences instead of maintaining a second linter, custom regex
+  checks or a plugin stack to recreate them. Preserve native correctness,
+  explicit-any and unused-binding rules and their maintained source scope.
+- Enforce static and type-import cycles through Oxlint. Retire dpdm and global
+  dynamic/mixed-import cycle enforcement. Dynamic-only cycles and cycles mixing
+  static and dynamic imports no longer have the previous whole-graph prevention.
+- Retire mandatory Knip full/production graph auditing and its permanent
+  dependency and configuration. Ordinary unused-binding, type and build checks
+  remain; they do not find every orphan file, export or dependency. A separately
+  requested temporary audit may use a dedicated tool without adding a recurring
+  second toolchain.
+- Make Vite+ own Node/package-manager selection, CI setup and routine `vp run`
+  execution. Node, pnpm, managed Vite/Vitest packages and required peers may remain
+  as implementation components. Migrate runtime pin readers, lifecycle hooks,
+  nested commands and dependency-update ownership coherently; retire obsolete
+  bootstrap and orchestration adapters after their callers move. Begin with
+  caching disabled. Release, evidence, live-site and VM tasks must remain
+  noncacheable: a restored success is not fresh verification evidence.
+- Consolidate meaningful Node tests into Vite+ Node projects and actual DOM,
+  Solid and Canvas consumers into Browser Mode before removing jsdom and native
+  canvas dependencies. Keep filesystem, Git, CLI and privileged automation in
+  Node. Browser engine providers and installed-extension acceptance adapters
+  retain their distinct responsibilities.
+- Replace independent `tsc` gates with integrated checking after project
+  discovery and test layouts cover the real browser, Node and Worker contracts.
+  Remove obsolete duplicate contexts; preserve runtime boundaries and meaningful
+  positive and negative controls. Existing compiler gates stay until their
+  replacement is qualified.
+
+The three applications have retired Stryker and mutation-score gates. Coverage
+is not equivalent to mutation testing. Preserve meaningful assertions, intended
+test discovery, coverage file sets and threshold semantics, supported browsers,
+security boundaries, release/source eligibility and emitted artifact contracts.
+Retain only the minimum product adapters for responsibilities such as actual
+extension installation, design/i18n/version/artifact/source guards and prepared-VM
+acceptance. Different diagnostics alone do not justify retaining a replaced tool.
+
+Trace package scripts, hooks, configuration imports, editor guidance, lockfiles,
+build approvals, update exclusions, coverage/report paths and tool-specific tests
+together. Remove superseded dependencies and scaffolding after their consumers
+move. Verify fresh bootstrap, supported runtimes, task lifecycle and interruption
+cleanup as well as affected source/test/artifact contracts. Use existing tests
+and command catalogs, without adding a permanent inventory framework. Record
+actual commands and outcomes; an unsupported boundary needs a minimal reproducer,
+the affected contract and a concrete resolution path, with the stage left open.
+Unmeasured size or speed benefits, deletion counts and test-count growth are not
+acceptance evidence.
+
+Vite+ does not require moving every setting into one file or enabling caching.
+A shared provider change must land and be verified before a consumer adopts its
+immutable Action pin. Record old/new `packages/core` gitlinks and shared Action
+commit SHAs, with qualification and rollback, independently; inspect nested core
+verification commands during final reconciliation. Keep `browser-core` private
+with raw TypeScript exports, no required distribution build, `vp pack` or npm
+publication, and its supported Node matrix. Consumers retain privileged workflows,
+source eligibility, release/deployment decisions and required-check ownership.
+This migration authorizes no new product runtime architecture, release publication
+or deployment. Their existing
 [prepared Windows contract](WINDOWS_VALIDATION.md) and project scenarios still
 govern real browser/VM acceptance; headless and fixture results retain their
 separate scope.
+
+DarkReNamer's Rust/Cargo and Python/PowerShell tooling and Peglin's Python/uv/Ruff
+and C#/.NET tooling have no corresponding Vite+ compiler, linter or runtime.
+Preserve their language-specific ownership and native qualification work; do not
+introduce Node just to wrap those tools. This repository remains documentation-only.
 
 ## UX review
 
