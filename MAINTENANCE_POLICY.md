@@ -321,6 +321,37 @@ and C#/.NET tooling have no corresponding Vite+ compiler, linter or runtime.
 Preserve their language-specific ownership and native qualification work; do not
 introduce Node just to wrap those tools. This repository remains documentation-only.
 
+## Design and contract changes
+
+Before selecting a refactor or correction, refresh the affected existing design
+information from the implementation base: actual callers, state/resource owners,
+transitions, cancellation/error precedence and persistence/commit rules. Read
+current manifests and platform contracts rather than copying a newer API or
+another project's state model. Keep shared mechanism contracts in
+[core's design](https://github.com/PiesP/browser-core/blob/master/docs/DESIGN.md)
+and [API guidance](https://github.com/PiesP/browser-core/blob/master/docs/API.md);
+product behavior and verification remain in the owning documents linked by each
+repository's contributor guide. Do not duplicate their state machines, pins or
+command matrices here.
+
+Classify starting evidence as a reproduced defect, conditional compatibility
+risk, maintainability proposal, measured result or untested hypothesis. Trace the
+owning entrypoint and reproduce an applicable defect before accepting a repair.
+Compare retaining the implementation, a minimal local correction and a broader
+option only when it has a concrete benefit. Evaluate correctness, compatibility,
+resource/data safety, lifecycle complexity and verification cost. A supported
+retain decision is valid; a reproduced defect requires a verified correction,
+current evidence that it is inapplicable, or explicitly incomplete work.
+
+Reconcile the document with the final behavior and record alternatives, source
+and artifact identities, baseline-failing/candidate-passing cases, actual checks
+and material limits in the owning issue or PR. Provider tests, browser fixtures,
+installed artifacts, native/game execution and publication each prove their own
+scope. Preserve failed evidence and identify the missing requirement and next
+runnable step for blocked checks. A coordination tracker closes only after it
+reconciles each owner's verified outcome; child issue closure alone is not that
+evidence. These principles add no common runtime, checker or recurring audit.
+
 ## UX review
 
 Use the shared

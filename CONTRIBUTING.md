@@ -9,6 +9,11 @@ For automation changes, follow the [ownership, command catalog and migration
 rules](MAINTENANCE_POLICY.md#automation-ownership). Use the target project's
 existing documentation and command surfaces for its implementation details.
 
+For design or ownership changes, follow the [contract-refresh and evidence
+rules](MAINTENANCE_POLICY.md#design-and-contract-changes): verify the current
+contract, compare viable options and reconcile documentation with the tested
+result, including a justified retain decision or explicit remaining work.
+
 Product-specific requirements remain in each repository: browser compatibility
 and emitted artifacts, Windows file safety and source-bound candidate evidence,
 and supported game builds and translation source hashes. Never bypass those
