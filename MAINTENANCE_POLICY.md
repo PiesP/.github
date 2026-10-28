@@ -331,8 +331,13 @@ another project's state model. Keep shared mechanism contracts in
 [core's design](https://github.com/PiesP/browser-core/blob/master/docs/DESIGN.md)
 and [API guidance](https://github.com/PiesP/browser-core/blob/master/docs/API.md);
 product behavior and verification remain in the owning documents linked by each
-repository's contributor guide. Do not duplicate their state machines, pins or
-command matrices here.
+repository's contributor guide. The affected product contracts are
+[dropconvert conversion/settings ownership](https://github.com/PiesP/wasm-motion-converter/blob/master/CONTRIBUTING.md#conversion-input-and-settings-ownership),
+[XCOM interaction ownership](https://github.com/PiesP/xcom-enhanced-gallery/blob/master/docs/gallery-interaction.md),
+[YouTube request lifetime](https://github.com/PiesP/yt-live-chat-overlay/blob/master/docs/chat-request-lifetime.md),
+[DarkReNamer foreground ownership](https://github.com/PiesP/DarkReNamer/blob/master/DEVELOPMENT.md#foreground-worker-ownership)
+and [Peglin release generation](https://github.com/PiesP/peglin-korean-revised/blob/master/CONTRIBUTING.ko.md#automation-command-catalog).
+Do not duplicate their state machines, pins or command matrices here.
 
 Classify starting evidence as a reproduced defect, conditional compatibility
 risk, maintainability proposal, measured result or untested hypothesis. Trace the
