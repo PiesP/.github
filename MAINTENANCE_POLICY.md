@@ -328,9 +328,10 @@ information from the implementation base: actual callers, state/resource owners,
 transitions, cancellation/error precedence and persistence/commit rules. Read
 current manifests and platform contracts rather than copying a newer API or
 another project's state model. Keep shared mechanism contracts in
-[core's design](https://github.com/PiesP/browser-core/blob/master/docs/DESIGN.md)
-and [API guidance](https://github.com/PiesP/browser-core/blob/master/docs/API.md);
-product behavior and verification remain in the owning documents linked by each
+[core's API guidance](https://github.com/PiesP/browser-core/blob/master/docs/API.md);
+its [Quiet Instruments design contract](https://github.com/PiesP/browser-core/blob/master/docs/DESIGN.md)
+owns visual and interaction design, separately from implementation architecture.
+Product behavior and verification remain in the owning documents linked by each
 repository's contributor guide. The affected product contracts are
 [dropconvert conversion/settings ownership](https://github.com/PiesP/wasm-motion-converter/blob/master/CONTRIBUTING.md#conversion-input-and-settings-ownership),
 [XCOM interaction ownership](https://github.com/PiesP/xcom-enhanced-gallery/blob/master/docs/gallery-interaction.md),
@@ -342,7 +343,10 @@ Do not duplicate their state machines, pins or command matrices here.
 Classify starting evidence as a reproduced defect, conditional compatibility
 risk, maintainability proposal, measured result or untested hypothesis. Trace the
 owning entrypoint and reproduce an applicable defect before accepting a repair.
-Compare retaining the implementation, a minimal local correction and a broader
+An explicitly selected architecture objective can justify a migration without a
+pre-existing defect. Compare alternatives that satisfy that objective; correctness
+of the old implementation alone cannot close a mandatory migration. Otherwise,
+compare retaining the implementation, a minimal local correction and a broader
 option only when it has a concrete benefit. Evaluate correctness, compatibility,
 resource/data safety, lifecycle complexity and verification cost. A supported
 retain decision is valid; a reproduced defect requires a verified correction,
@@ -356,6 +360,51 @@ scope. Preserve failed evidence and identify the missing requirement and next
 runnable step for blocked checks. A coordination tracker closes only after it
 reconciles each owner's verified outcome; child issue closure alone is not that
 evidence. These principles add no common runtime, checker or recurring audit.
+
+### Composition and behavioral contracts
+
+Product orchestration and behavior reuse must use composition rather than
+inherit implementation or state from repository-defined base classes. Construct
+explicitly owned collaborators at a factory or composition root and expose narrow
+behavioral contracts at actual boundaries. Ordinary classes, functions, closures,
+immutable records, discriminated unions, TypeScript interface extension and
+implementation, and Rust traits with appropriate generic or dynamic dispatch
+remain valid. Do not introduce an interface or factory for every helper.
+
+Separate borrowed operation capabilities from owner-only cancellation,
+invalidation, retirement and disposal authority. Where relevant, document
+construction and cleanup order, idempotence, stale-result rejection, failure and
+recovery. Preserve lazy construction, bounded work, transfer ownership, existing
+memory, cancellation, protocol, platform, accessibility, data-safety and release
+contracts. Avoid per-operation dependency resolution and style-driven copies.
+
+Narrow direct subclasses of native errors and required external-framework
+adapters are permitted final boundary exceptions when documented locally; their
+internal policies use composition. Product-defined error-to-error inheritance is
+a migration target. A strict ban on every native error subclass and a
+portfolio-wide Result conversion are separate scope expansions. Win32
+window-procedure subclassing and generated COM interfaces are native adapter
+mechanisms, not Rust class-implementation inheritance.
+
+Keep final boundary exceptions separate from temporary migration exceptions.
+Each temporary exception names the exact hierarchy, reason, owner issue and
+removal condition. It must not become a blanket exemption. This policy covers
+product internals and coupled tests, instrumentation and documentation;
+developer-tooling/test-framework inheritance and generated/vendor code are not
+wholesale rewrite targets. Peglin's required `BaseUnityPlugin` entry point stays
+thin and composes ordinary runtime components; its CLI/provenance work changes
+only as needed to bind and qualify the changed runtime sources and candidate.
+
+Adopt/link this rule in each affected repository's contributor or architecture
+entry point; local contributor files take precedence over community defaults.
+Keep detailed state machines and resource contracts in their existing owners.
+This policy requires no DI container, shared renderer/runtime or event framework,
+generic ownership registry, speculative backend, new runtime dependency, or
+second lint/toolchain stack. Already-conforming code and explicitly bounded
+optional assessments may retain their implementations with evidence and a
+concrete revisit trigger. Required migrations retain their implementation and
+behavioral-verification obligations under the
+[architecture program](https://github.com/PiesP/.github/issues/39).
 
 ## UX review
 

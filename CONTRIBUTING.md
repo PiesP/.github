@@ -13,6 +13,10 @@ For design or ownership changes, follow the [contract-refresh and evidence
 rules](MAINTENANCE_POLICY.md#design-and-contract-changes): verify the current
 contract, compare viable options and reconcile documentation with the tested
 result, including a justified retain decision or explicit remaining work.
+Adopt the [composition and behavioral-contract policy](MAINTENANCE_POLICY.md#composition-and-behavioral-contracts)
+for product architecture, with explicit collaborator ownership and narrow
+native/framework boundary exceptions. A maintainer-selected migration does not
+require a pre-existing defect; compare implementations that meet its scope.
 
 Product-specific requirements remain in each repository: browser compatibility
 and emitted artifacts, Windows file safety and source-bound candidate evidence,
