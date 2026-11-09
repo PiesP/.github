@@ -23,11 +23,14 @@ this page. Keep connection details, VM identities, and raw results private.
    capability, routes, security controls, and desktop availability. Record
    observed facts separately from desired settings. Qualify a working baseline
    as found; change only a demonstrated gap through its authorized owner.
-3. Reserve one VM and one interactive workload at a time across repositories.
-   Keep the per-VM lock, browser-profile lease, and guest-side mutex together;
-   check their actual owners before recovery. A second run must wait or fail
-   before product execution. Do not reuse another run's browser profile or
-   desktop session.
+3. Assign a distinct qualified VM to each concurrent agent workload. Serialize
+   interactive work within each VM; independent VMs may validate concurrently
+   when host resource admission and the owning acceptance contract permit it.
+   Keep each VM's GUID lock, browser-profile lease, and guest-side mutex together
+   through collection and cleanup. A competing run on the same VM must wait or
+   fail before product execution. Do not reuse another run's browser profile,
+   source output or desktop session. Performance and duration contracts may
+   require controlled neighboring workloads or exclusive host conditions.
 4. Verify the intended host and guest identities, trusted SSH host key and
    executable, authenticated RDP endpoint and account, and that both transports
    refer to the intended guest and account. Check the expected VM GUID,
@@ -126,6 +129,35 @@ after review. A frozen test campaign does not authorize automatic host security
 changes or permanently disabled updates. For interrupted runs, use the current
 installed controller's help and ownership checks to choose exact resume and
 recovery commands; preserve the first attempt and any failed cleanup receipt.
+
+### Disposable allocation and retirement
+
+For authorized validation, use an existing qualified template and size a new
+task-owned child for the selected browser/native/game prerequisites. Ordinary
+creation, connection, collection, graceful shutdown and guarded disposal of
+that owned child are parts of the task's lifecycle; do not repeatedly request
+the same established authorization. Inspection-only requests, explicit runtime
+deferrals, other tasks' retained VMs, template changes and privilege/trust policy
+changes retain their own boundaries.
+
+Use the installed controller's current resource-admission contract. It must
+serialize allocation, account for retained/unstarted children as well as live
+host headroom, and preserve host reserves. A small functional fixture and a full
+media/native/game run need not receive the same resources. Record the chosen
+and observed CPU/RAM/display conditions; do not shrink a required acceptance
+environment to obtain another slot or resize another workload's VM. Resource
+refusal queues work or selects another authorized suitable environment; it does
+not authorize eviction or disabling guards.
+
+Give each agent an explicit owner/run identity, selected private profile,
+source identity, external evidence root and release condition. At completion,
+wait for run-owned process/job cleanup, restore task-touched state, release the
+desktop lease and verify evidence collection before graceful shutdown. Destroy
+only the exact owned child through the controller's off-state, disk ownership
+and external disposal-receipt checks. Verify VM/disk and per-run connection
+cleanup. Keep reusable templates, shared infrastructure and durable failed
+evidence. A retained powered-off VM or incomplete cleanup is reported with its
+owner and recovery action; age alone does not make it disposable.
 
 ## Product entry points
 
