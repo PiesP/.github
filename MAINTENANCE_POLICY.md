@@ -46,8 +46,10 @@ No new product or Windows acceptance campaign follows from this CI policy work.
 
 Stage new producers before requiring their app-bound names. Preserve existing
 required contexts until a replacement is observed and retirement is justified.
-Change only the intended protection subresource and immediately read back classic
-protection, applicable rulesets and repository settings. Recover a broken producer
+For existing protection, change only the intended subresource. Initial protection
+creation needs a complete reviewed definition. Immediately read back classic
+protection, applicable rulesets and repository settings after either operation.
+Recover a broken producer
 through a reviewed protected repair or revert; retain the last verified checks
 and never disable protection, use bypass actors or remove a failing gate to merge.
 
