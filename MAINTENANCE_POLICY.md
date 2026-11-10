@@ -12,6 +12,45 @@ Review the project's own guidance and live GitHub settings before a change.
 | Reviewed settings | Compare each repository's declared `.github/settings.yml` with live protection and required checks. A declaration is not proof that GitHub enforces it. Record each proposed exception and approve external settings changes separately. |
 | Limited automation authority | Keep privileged merge, release, deployment, secrets, and artifact promotion in the owning repository. Shared browser automation may install tools but does not inherit those privileges. |
 
+## Reviewed merge admission
+
+The operating model is AI assistance plus one human maintainer. The maintainer
+admits a reviewed PR; app-bound checks enforce the automated conditions. Native
+auto-merge, where enabled, waits for those conditions after admission. Executable
+dependency, toolchain and Actions updates require explicit review, including
+security updates. An open security alert increases review priority and grants no
+automatic approval or merge authority. Keep the retired dependency approval/merge
+pipelines retired and preserve each repository's manual browser-core handoff.
+
+Code repositories retain strict required checks, administrator enforcement,
+resolved conversations, zero mandatory approving reviews, and no force pushes or
+default-branch deletion. Independent review may be AI review; this does not
+require a second human or unconditional bot approval. Each repository owns its
+required producers and success semantics. A successful CodeQL analysis proves
+analysis completion; finding-severity enforcement requires a separately verified
+provider rule or explicit result policy.
+
+This documentation-only repository uses a PR requirement with zero mandatory
+approvals, administrator enforcement, resolved conversations, no force pushes or
+default-branch deletion, squash-only merging and native auto-merge disabled.
+It intentionally has no required CI names, workflow or automation runtime. Review
+the exception when executable tooling is introduced. Its live application and
+readback belong to [the merge-policy reconciliation](https://github.com/PiesP/.github/issues/43);
+this document alone does not apply protection.
+
+DarkReNamer retains its required `pr-gate/security` Rust dependency policy and
+optional CodeQL analysis for Rust, Python and Actions. This is a bounded analysis
+completion exception, not an alert-free claim. Its maintainer reviews the scope
+when scanner coverage, a security incident or the required-gate contract changes.
+No new product or Windows acceptance campaign follows from this CI policy work.
+
+Stage new producers before requiring their app-bound names. Preserve existing
+required contexts until a replacement is observed and retirement is justified.
+Change only the intended protection subresource and immediately read back classic
+protection, applicable rulesets and repository settings. Recover a broken producer
+through a reviewed protected repair or revert; retain the last verified checks
+and never disable protection, use bypass actors or remove a failing gate to merge.
+
 ## Automation ownership
 
 Use each project's primary language for maintained automation. Retire obsolete
