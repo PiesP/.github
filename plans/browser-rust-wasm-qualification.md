@@ -1,8 +1,54 @@
-# Rust/WASM qualification for three browser products
+# Browser product optimization and Rust/WASM qualification
 
-The portfolio investigation closed on 2026-11-22. Three decisions retain the shipping implementation. Direct GIF input remains an optional experiment with a measured re-entry condition. No candidate qualified for a product change. [Completed portfolio tracker](https://github.com/PiesP/.github/issues/48)
+## Active implementation round
 
-## Decisions and evidence
+[Portfolio issue #48](https://github.com/PiesP/.github/issues/48) tracks ten decisions. The first round established performance baselines for four candidate designs. This round improves those designs and six additional implementation paths. A missed target is an **OPTIMIZE** result. Keep the qualified implementation in production, diagnose the shortfall and work on the next design.
+
+### Work and ownership
+
+| Product and candidate | First implementation or measurement | Design change to investigate after a miss |
+| --- | --- | --- |
+| [Converter](https://github.com/PiesP/wasm-motion-converter/issues/550) · Packed RGB alpha | Skip writes to the alpha byte when the packed result discards it. | Confirm which readback actually ran and verify the work removed per frame. Attribute remaining packed-RGB cost to conversion and ingress separately. |
+| Converter · Native WebP | Pass an eligible opaque, unrotated, unscaled frame directly to the existing native encoder. Compare the ordinary parallel pool and its current worker count. | Separate readback, transfer/queue time, encode and mux. Use a serial direct-draw control, then investigate bounded worker handoff or eligible visible rectangles when the profile supports it. |
+| Converter · Software VP8 | Preserve the three-byte input to the owned encoder. Profile packing directly into an admitted WASM destination. | If packing and copy cannot explain the product target, investigate the largest measured software-route cost. Compare at the same quality, preset and resource limits. |
+| Converter · GIF | Measure readback, remaining input copy, pixel preparation and histogram work separately. | Compare a bounded destination lease or one pass over the prepared pixels for dithering and histogram updates. Choose by attribution, then prove palette, timing and output parity on both index paths. |
+| [Overlay](https://github.com/PiesP/yt-live-chat-overlay/issues/478) · Author height | Use supplied author bounds before invoking Canvas text measurement. | Verify the actual call count, font/baseline restoration and drawn coordinates. If drawing remains expensive, identify the next measured text cost. |
+| Overlay · Paid-card layout | Reuse one prepared layout per active card within its renderer. | If full-plan retention adds too much invalidation or memory work, reuse only wrapped body and translation. Test content/size/font changes and release on removal. |
+| Overlay · Placement/reflow | Trace arrival, deferral, queueing, reservation and first presentation by ID. Include the known burst seed and independent seeds. | Compare the strongest simple TS with copy-only and a bounded resident-geometry or coarser-batch kernel. If delay is elsewhere, optimize the identified stage. Account for work still pending at measurement end. |
+| [Gallery](https://github.com/PiesP/xcom-enhanced-gallery/issues/553) · Blob-backed ZIP | Compute CRC using bounded source reads and retain the immutable member Blob through finalization. | Compare single bounded reads for small entries with slicing large entries. Attribute the peak to cache, bodies, outstanding reads and final output reservation. |
+| Gallery · DOM ownership | Reuse an element's owner within the uninterrupted synchronous pass. Revalidate the clicked tile after awaiting source resolution. | If source probes dominate first display, trace the selected tile and neighbours independently. Compare scheduling only with both gallery-open and save latency measured. |
+| Gallery · CRC and archive pipeline | Compare incremental CRC in an already required read with the existing pipeline. Reuse the established small control and look for permitted, representative larger inputs. | If isolated CRC cannot supply the required saving, identify the critical path through reads, scheduling and finalization. A combined design may improve the archive while a pure-kernel candidate remains open for new evidence. Record the contribution and disposition of each. |
+
+### Engineering sequence
+
+1. **Establish controls.** Refresh the current source, submodule, installed artifacts, open issues and prior decisions. Reuse matching worktrees and PRs. Freeze the user action, eligible input, measurable benefit, guardrails and comparison method before timing each variant. Use absolute and relative changes, paired observations and dispersion. Separate first-use and warm runs. Keep uninstrumented controls and the full sample distribution. Quote the specific environment and route.
+2. **Land small changes independently.** For discarded alpha, author bounds and duplicate DOM observations, show the work count eliminated, exact semantics, representative controls and no resource or latency regression. These changes can qualify as simplifications even when the component gain is below the threshold used to justify a new subsystem. Keep product latency claims proportional to what was measured.
+3. **Improve the boundaries.** The converter owns frame/arena leases until their physical consumer settles, including cancellation. Retain existing fallback capacity and ordered output. The overlay owns timing and fairness in JS, retains layout data only for its useful lifetime, and tests recovery in each executing realm. The gallery owns input, borrowed cache, pending read and final output credits through their actual release points. Preserve limits, partial downloads and source-bound names. Prefer a small change to an existing owner over a new general interface.
+4. **Iterate on a miss.** Keep the row open as OPTIMIZE. Quantify the gap, the observed noise and the maximum plausible gain from the timed stage. Identify a specific bottleneck, select the next distinct design and write down its predicted change before rerunning. Improve the measurement if the interval, route or sample was invalid. Retain all prior attempts. Do not pool incompatible workloads, repeat an identical failed trial without new information, or lower a frozen target to declare a pass. A pivot to another stage must preserve the original candidate's recorded status.
+5. **Qualify the product.** Run the scoped parity and resource tests, then the owning repository's applicable full checks on the candidate. Use the real product entry point and the [prepared Windows VM](../WINDOWS_VALIDATION.md) for installed-browser evidence. For WMC use the designated private owner clip locally, a small control, and the normal native multi-Worker path. For the two browser add-ons distinguish installed extension, actual Worker/main path, packaged userscript, and available supported browsers. Preserve output bytes where deterministic, user-visible behavior, cancellation, retry, memory ceilings, startup and fallback. Keep private media and authentication/session data local.
+6. **Deliver and reconcile.** Use focused product PRs. Fix recoverable CI, review and integration failures. Follow [normal reviewed merge admission](../MAINTENANCE_POLICY.md#reviewed-merge-admission) and verify the landed SHA, artifact and applicable product behavior. Progress independent work while another row is blocked.
+
+### Decisions and completion
+
+| State | Next action or completion condition |
+| --- | --- |
+| READY / IN PROGRESS | Baseline or implement the named candidate. |
+| OPTIMIZE | A target was missed. Record the reason, predicted next design, owner and next comparison. Keep working. |
+| READY TO SHIP | Functional, resource and per-candidate acceptance checks pass. Open or update the product PR and complete normal admission. |
+| VERIFIED ON MASTER | Confirm the landed revision and required product evidence. Record the actual gain and remaining limits, then close the row. |
+| BLOCKED / WAITING FOR EVIDENCE | All presently executable alternatives have been investigated and a named prerequisite prevents the next meaningful action. Identify the missing input, owner and exact resume trigger. Leave the owning issue and tracker open. |
+
+The worker may choose and revise designs. Only an explicit maintainer scope decision can retire an open candidate without a qualified outcome. Failure to meet a threshold, exhaustion of an identical retry, or merging this planning document cannot retire it. Report any unresolved rows honestly at handoff.
+
+### Starting evidence
+
+The [component measurements](evidence/browser-optimization-components.json) include the raw paired WebP and RGB timings, synthetic ZIP comparison and author-height call counts. In one serial Chromium Worker, eight opaque synthetic frames had a 59.885 ms paired median saving with direct drawing. The previous installed Windows control used four native encoder Workers. These results need separate product qualification. Eight synthetic Blob members produced identical archives with 16,780,772 fewer bytes of typed-array member bodies retained by the experimental writer; browser peak memory remains to be measured. Each product issue specifies its own follow-up.
+
+## Historical first round
+
+The original policy, observations and thresholds below document the completed first round. The active follow-up uses the decision rules above. [First-round document at its merged revision](https://github.com/PiesP/.github/blob/44fe58932ed4e68c55ce201d829c5d0456fd0388/plans/browser-rust-wasm-qualification.md)
+
+### Decisions and evidence
 
 | Decision | Disposition | What determined the decision |
 | --- | --- | --- |
@@ -11,11 +57,11 @@ The portfolio investigation closed on 2026-11-22. Three decisions retain the shi
 | Chat placement and reflow | **RETAIN_CURRENT** | The 40-sample Edge baseline identified headroom in Worker bursts. In the 64-sample comparison, the TypeScript trial improved paired frame CPU p95 by 0.45 ms (9.26%), below the 1 ms and 10% gate. WASM gained 0.00 ms over that trial. Keep the shipping renderer. [Main and Worker baseline](https://github.com/PiesP/yt-live-chat-overlay/issues/477#issuecomment-7074710183) · [Four-arm comparison and fairness checks](https://github.com/PiesP/yt-live-chat-overlay/issues/477#issuecomment-7074966339) |
 | Gallery ZIP CRC32 | **RETAIN_CURRENT** | The new 40-photo fixture produced a 252,822-byte ZIP. In the existing 2,993,158-byte cohort, the largest warm CRC and table setup cost was 10.20 ms against a required saving of 50 ms and 10%. The workload review found no representative increase in bytes or CRC cost to warrant another benchmark. [Workload review and retained measurements](https://github.com/PiesP/xcom-enhanced-gallery/issues/534#issuecomment-7074481279) |
 
-## Original qualification plan
+### Original qualification plan
 
 The sections below preserve the experiment design and its conditional verification steps. The product issue records above identify the checks that ran and the environments they covered.
 
-### Design and decision sequence
+#### Design and decision sequence
 
 1. Refresh the heads, submodule pins, relevant issues, PRs, product limits and repository instructions. Identify the real caller and record where each input is produced, copied, borrowed, consumed and released. Follow the normal user entry point through the delivered artifact. Identify the executing realm and verify which route ran.
 2. Keep browser APIs, async scheduling, UI and recovery under their existing owners. Put only the candidate's bounded computation or buffer handling behind a narrow interface. Express pixel format, stride, valid length and lifetime at the conversion boundary; use message IDs and numeric geometry at the renderer boundary. Reuse current owners and tests. Keep these interfaces product-local by default. Consider sharing code if multiple consumers already need the same behavior and the change reduces maintenance cost.
@@ -23,23 +69,23 @@ The sections below preserve the experiment design and its conditional verificati
 4. Start with the simplest correct TypeScript or existing-ABI alternative. If even ideal removal of the measured work cannot meet the target, record the result and stop that experiment. If it can, evaluate the implementation including boundary overhead. Use actual supported browser packages and contexts, with separate results for available browsers and paths. Name any missing coverage. Never turn an unavailable measurement into a zero.
 5. Keep production, test-only instrumentation and private raw evidence distinguishable. Publish reproducible commands, source/artifact hashes, fixture properties or digests and sanitized measurements. Keep private media, sessions, identifiers and VM receipts local. Use the [prepared Windows VM contract](../WINDOWS_VALIDATION.md) for installed-browser checks. A single machine or VM must have one owner during a timing run.
 
-### Converter
+#### Converter
 
 On the **software VP8 route**, compare today's packed RGB input with the same owned encoder receiving four-channel input. Start with opaque, unrotated, unscaled RGBX and smart skip off. Count the eliminated JavaScript pass and intermediate storage, the extra byte per pixel copied into WASM, and their effects on peak live and reserved memory. Keep native Canvas as an independent control and report software-route eligibility. Compare the designated local 720 × 720 clip and a small control. Expand a promising result to channel order, padded stride, odd sizes, smart skip, geometry transforms, memory pressure, cancel and retry. Compare logical pixel values, selected frames, timestamps and decoded output, plus byte parity where deterministic. The legacy V8 capture fixes a different comparison and three-byte input. [Current host call](https://github.com/PiesP/wasm-motion-converter/blob/ffd1fadce8951135d748c32b3a5d02b9aba2117e/src/services/webp-encoder-service.ts#L110-L179) · [Current encoder ABI](https://github.com/PiesP/wasm-motion-converter/blob/ffd1fadce8951135d748c32b3a5d02b9aba2117e/crates/owned-vp8/README.md#L339-L354)
 
 For **direct GIF input**, assess the remaining four-byte-per-pixel host copy on an eligible workload. Direct asynchronous writes require a destination lease that lasts through settlement, including cancellation. Prove geometry/color equivalence, safe growth/reuse/release, retained-index and fallback behavior, frame sequence and timing before adoption. Record a trigger if the evidence supports continued deferral. Keep the existing independent GIF implementation, owned demux and adopted VP8 intact. The previous motion-signature experiment, historical GIF rights and regional cache follow-ups have their own decisions. [GIF copy decision](https://github.com/PiesP/wasm-motion-converter/blob/ffd1fadce8951135d748c32b3a5d02b9aba2117e/docs/experiments/496-gif-fusion-results.md#L65-L69) · [Motion-signature measurements](https://github.com/PiesP/wasm-motion-converter/blob/ffd1fadce8951135d748c32b3a5d02b9aba2117e/docs/experiments/483-owner-video.md#L45-L55)
 
-### Overlay
+#### Overlay
 
 Measure frame and placement p50/p95, first-visible latency, drain-budget exhaustion, backlog and drops with ordinary chat and repeatable mixed-priority bursts. Separate steady placement from resize/reflow. Capture actual extension Worker traces and packaged userscript main-thread traces; the main HUD's moving average cannot establish Worker or tail timing. Preserve the synchronous drain limits of 4 ms and 32 attempts, along with interruption and fairness behavior. If there is headroom, compare the best simple TypeScript alternative, a boundary-copy control and one bounded batch of IDs and numeric geometry. Verify lane, collision, timing, priority, drops, replay and recovery using the existing parity tests. Test the shipped loader and fallback in each actual execution context before adopting WASM. Keep DOM, shaping, canvas drawing and bidirectional text with their current owners unless additional profiling changes the case. [Queue budget](https://github.com/PiesP/yt-live-chat-overlay/blob/b496a29e151819767be2c6cedba7d92c5e79941f/src/renderer/canvas/drain-batch.ts#L23-L55) · [Canvas/Worker parity test](https://github.com/PiesP/yt-live-chat-overlay/blob/b496a29e151819767be2c6cedba7d92c5e79941f/test/browser/renderer/placement-timing-integration.browser.test.ts#L541-L584)
 
-### Gallery
+#### Gallery
 
 The prior Edge cohort measured 10.20 ms at most for CRC plus table setup across ten warm runs on a 2,993,158-byte four-member archive. The established gate requires at least 50 ms and 10% improvement in warm action-to-final-Blob latency. The merged 20/40-item feature supplies a new supported cardinality. Reopen the performance question only for a representative change in total bytes or measured CRC attribution. Check locally available permitted inputs during this campaign. Without qualifying evidence, record retention and finish the row. [CRC result](https://github.com/PiesP/xcom-enhanced-gallery/blob/405496e2539f404e7d707e0fb3bd1f61c70cfdef/docs/experiments/534-transport-followup.md#L90-L121) · [20/40-item PR](https://github.com/PiesP/xcom-enhanced-gallery/pull/541)
 
 If the trigger is met, repeat the end-to-end and CRC interval-union measurements with a small control before writing a kernel. Adapt the historical harness to current source in an isolated experiment. Use the existing five first-use and ten qualified warm observations per variant and the recorded noise rule when running a candidate comparison against the best correct JS. Preserve chunking (up to 1 MiB), yields, aborts, live-byte ceilings, archive member names, member ownership, bytes, sizes and CRCs. Verify actually saved archives in the relevant shipping environments. Link new evidence to the existing decision; open a new implementation issue only if warranted.
 
-### Verification and handoff
+#### Verification and handoff
 
 Use each repository's checked-in commands at the tested revision and its normal [merge admission](../MAINTENANCE_POLICY.md#reviewed-merge-admission). Starting points for the converter are the frame-utils, decoder, owned VP8 memory/product and GIF tests, `vp run verify:full` and `vp run test:e2e:resource`. For the overlay, run the placement/timing integration and layout tests, `vp run verify:full`, then restore production artifacts with `vp run build:all:ci` and `vp run check:artifacts`. Gallery product changes use `vp run verify` plus saved-archive checks. A retention decision only needs the evidence required to establish it.
 
