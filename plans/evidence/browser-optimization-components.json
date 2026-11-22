@@ -1,0 +1,169 @@
+{
+  "title": "Browser product optimization follow-up measurements",
+  "date_jst": "2026-11-22",
+  "baseline_revisions": {
+    "PiesP/wasm-motion-converter": "ffd1fadce8951135d748c32b3a5d02b9aba2117e",
+    "PiesP/xcom-enhanced-gallery": "405496e2539f404e7d707e0fb3bd1f61c70cfdef",
+    "PiesP/yt-live-chat-overlay": "b496a29e151819767be2c6cedba7d92c5e79941f"
+  },
+  "scope": "Read-only product review with isolated experiments on current-source functions and browser API paths. These rows do not estimate latency in deployed products.",
+  "native_webp_worker": {
+    "runtime": "Linux, headless Playwright Chromium 159.0.8154.6; isolated localhost context; one serial Worker; quality 0.60",
+    "input": "Eight different synthetic opaque BT.709 limited-range I420 VideoFrame objects. Coded 720 × 736, visible 720 × 720. Generated up front, cloned for each run. No decode, scaling or rotation.",
+    "arm_a": "Draw to a willReadFrequently Canvas, getImageData, force the alpha channel opaque, transfer the ArrayBuffer to the Worker, putImageData, encode to WebP and transfer the output bytes back.",
+    "arm_b": "Transfer the VideoFrame to the same Worker, draw it directly, close it, encode and transfer the output bytes back.",
+    "method": "One untimed warm-up per arm. Ten alternating A/B and B/A pairs. Each reported value covers eight sequential encodes from host dispatch to return of compressed frame bytes. Check byte identity after timing.",
+    "ms_per_eight_frames": {
+      "n_pairs": 10,
+      "arm_a_median_ms": 329.35500000044703,
+      "arm_b_median_ms": 265.0049999989569,
+      "paired_gain_median_ms": 59.88500000163913,
+      "paired_gain_mad_ms": 22.37250000052154,
+      "pairs_with_positive_gain": 10
+    },
+    "raw_pairs_ms": [
+      [
+        328.9750000014901,
+        282.53999999910593
+      ],
+      [
+        334.98499999940395,
+        276.75
+      ],
+      [
+        348.2800000011921,
+        259.695000000298
+      ],
+      [
+        325.910000000149,
+        243.5949999988079
+      ],
+      [
+        329.73499999940395,
+        241.5050000026822
+      ],
+      [
+        326.05000000074506,
+        243.84999999776483
+      ],
+      [
+        334.23000000044703,
+        325.23000000044703
+      ],
+      [
+        305.660000000149,
+        249.38500000163913
+      ],
+      [
+        288.125,
+        270.60999999940395
+      ],
+      [
+        331.8500000014901,
+        270.3149999976158
+      ]
+    ],
+    "equal_output_pairs": 10,
+    "repeatability_within_each_arm": true,
+    "encoded_member_sizes": [
+      7402,
+      7256,
+      7312,
+      7334,
+      7424,
+      7638,
+      7894,
+      8028
+    ],
+    "limits": "One synthetic geometry and one browser. No product UI, demux, decode, mux, dynamic pressure, multiple workers, smart skip, cold loading, Windows, process or GPU peak measurement."
+  },
+  "discarded_alpha": {
+    "runtime": "Same headless Chromium session",
+    "input": "720 × 720 synthetic packed pixel input. Frozen source convertImageData and convertRGBAToRGB. Reused destination stub common to both arms. No native Canvas I/O in the timed interval.",
+    "method": "Branch early only for packed RGB, keeping opaque normalization for RGBA. Six warm-up pairs, then twelve alternating pairs, 24 calls per arm in each pair. Units below are milliseconds per call.",
+    "ms_per_frame": {
+      "n_pairs": 12,
+      "arm_a_median_ms": 1.5495833333892128,
+      "arm_b_median_ms": 1.2120833333271246,
+      "paired_gain_median_ms": 0.314687499931703,
+      "paired_gain_mad_ms": 0.038854166787738564,
+      "pairs_with_positive_gain": 12
+    },
+    "raw_pairs_ms_per_frame": [
+      [
+        1.7764583334016304,
+        1.1727083333147068
+      ],
+      [
+        1.4885416665735345,
+        1.182083333376795
+      ],
+      [
+        1.5460416666852932,
+        1.2425000000124176
+      ],
+      [
+        1.4685416667101283,
+        1.2654166667101283
+      ],
+      [
+        1.5583333332712452,
+        1.3789583332836628
+      ],
+      [
+        1.5697916666977108,
+        1.369374999931703
+      ],
+      [
+        1.5735416666915019,
+        1.2033333332898717
+      ],
+      [
+        1.5331250000745058,
+        1.196250000037253
+      ],
+      [
+        1.8660416666728754,
+        1.631458333383004
+      ],
+      [
+        1.5531250000931323,
+        1.2208333333643775
+      ],
+      [
+        1.4902083333581686,
+        1.1547916666604578
+      ],
+      [
+        1.5168750000496705,
+        1.193958333383004
+      ]
+    ],
+    "parity": "Four image sizes, two byte offsets, two output layouts, varying alpha. All 16 paired outputs matched; RGBA stayed opaque."
+  },
+  "gallery_blob_zip": {
+    "runtime": "Node 24.22.3 and Python zipfile",
+    "input": "Eight generated immutable binary Blobs of lengths 2*1024*1024+i*127 bytes, i from 0 through 7. Byte j is (i*31+j*17+(j>>13)) mod 256.",
+    "method": "Original stored ZIP writer materialized every source Blob as an ArrayBuffer. Experimental writer updated CRC from Blob slices of up to 1 MiB and retained the original Blob as each member body. Entries were committed serially, with a common local yield adapter. Compared complete bytes and read all members with Python zipfile.",
+    "input_bytes": 16780772,
+    "output_zip_bytes": 16781626,
+    "output_zip_sha256": "f2015fe4c6e23cc6f011bb6c0f2e911085357eec1ef92ed860c6babf6b244b34",
+    "baseline_typed_array_member_bytes_retained_in_final_parts": 16780772,
+    "candidate_typed_array_member_bytes_retained_in_final_parts": 0,
+    "candidate_source_blobs_held": 8,
+    "crc_chunk_limit_bytes": 1048576,
+    "limits": "Logical references in writer parts only. Does not measure browser heap, peak process memory, cache eviction, concurrency, end-to-end latency or resource admission."
+  },
+  "overlay_author": {
+    "method": "Pinned drawAuthorSection with counting Canvas substitute, three width conditions, each with and without existing author bounds, 120 frames per case.",
+    "with_cached_bounds_mg_calls_per_case": {
+      "before": 120,
+      "after": 0
+    },
+    "without_cached_bounds_mg_calls_per_case": {
+      "before": 120,
+      "after": 120
+    },
+    "checks": "Drawn names, coordinates, returned Y, font and baseline matched. Browser latency not timed."
+  }
+}
