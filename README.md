@@ -35,3 +35,13 @@ unverified. Neither command is supplied by this repository.
 GitHub's [default community file rules](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file)
 require a public `.github` repository and explain file precedence. These
 defaults do not appear in individual repository clones.
+
+## License
+
+The [MIT License](LICENSE) covers PiesP's original text and examples in this
+README, the contribution and support guides, the maintenance policy, the Windows
+validation guide, and the [browser qualification plan](plans/browser-rust-wasm-qualification.md).
+It also covers the original summaries and structure of the plan's
+[evidence file](plans/evidence/browser-optimization-components.json).
+Linked projects, cited material, and referenced test inputs retain their own
+license terms.
