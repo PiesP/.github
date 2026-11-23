@@ -2,7 +2,7 @@
 
 ## Active implementation round
 
-[Portfolio issue #48](https://github.com/PiesP/.github/issues/48) tracks ten decisions. The first round established performance baselines for four candidate designs. This round improves those designs and six additional implementation paths. A missed target is an **OPTIMIZE** result. Keep the qualified implementation in production, diagnose the shortfall and work on the next design.
+[Portfolio issue #48](https://github.com/PiesP/.github/issues/48) tracks the original ten decisions below and ten additional implementation candidates in the product issues. The first round established performance baselines for four designs. The original implementation round revisits those four and adds six more. A missed target is an **OPTIMIZE** result. Keep the qualified implementation in production, diagnose the shortfall and work on the next design.
 
 ### Work and ownership
 
@@ -27,6 +27,60 @@
 4. **Iterate on a miss.** Keep the row open as OPTIMIZE. Quantify the gap, the observed noise and the maximum plausible gain from the timed stage. Identify a specific bottleneck, select the next distinct design and write down its predicted change before rerunning. Improve the measurement if the interval, route or sample was invalid. Retain all prior attempts. Do not pool incompatible workloads, repeat an identical failed trial without new information, or lower a frozen target to declare a pass. A pivot to another stage must preserve the original candidate's recorded status.
 5. **Qualify the product.** Run the scoped parity and resource tests, then the owning repository's applicable full checks on the candidate. Use the real product entry point and the [prepared Windows VM](../WINDOWS_VALIDATION.md) for installed-browser evidence. For WMC use the designated private owner clip locally, a small control, and the normal native multi-Worker path. For the two browser add-ons distinguish installed extension, actual Worker/main path, packaged userscript, and available supported browsers. Preserve output bytes where deterministic, user-visible behavior, cancellation, retry, memory ceilings, startup and fallback. Keep private media and authentication/session data local.
 6. **Deliver and reconcile.** Use focused product PRs. Fix recoverable CI, review and integration failures. Follow [normal reviewed merge admission](../MAINTENANCE_POLICY.md#reviewed-merge-admission) and verify the landed SHA, artifact and applicable product behavior. Progress independent work while another row is blocked.
+
+### Measuring transfer costs
+
+Use this comparison when an owning issue proposes moving computation or data across the JavaScript/WebAssembly boundary. Start with the same eligible input, work order, output contract, resource limits and strongest equivalent production or optimized JS/TS control.
+
+1. Replay one set of inputs through **the control**, **a copy-only diagnostic**, and **the full candidate**. The diagnostic performs the same packing, directional copies, calls and output marshalling as the candidate. Where the next request depends on the result, feed the recorded decisions back into the diagnostic to preserve the work sequence. Only the real implementations can qualify for shipping. Compare uninstrumented end-to-end actions separately in the installed product.
+2. Record the executing realm, actual call count, argument/result sizes, explicitly copied bytes in each direction and live backing sizes. Separate a borrowed view from a byte copy. Identify Worker transfers, serialized payload sizes, browser readback and GPU drawing separately. If the browser does not expose a physical copy, label its size unknown. For memory, record overlapping live allocations and the high-water mark. For time, keep first use, warm use, initialization and the user-visible interval distinct; concurrent stage times can overlap.
+3. For each borrowed range, name its owner, when it may move and what event permits reuse. Reserve capacity before exposing a view, and reacquire or validate it after operations that can grow memory. If a consumer can outlive cancellation, hold its lease until it settles. On a missed target, record **OPTIMIZE**, the measured shortfall and the next changed design under the owning issue.
+
+| Product | First comparison | Product acceptance |
+| --- | --- | --- |
+| [Converter #554](https://github.com/PiesP/wasm-motion-converter/issues/554#measure-gif-and-packet-transfers-before-adopting-the-candidate) and [#550](https://github.com/PiesP/wasm-motion-converter/issues/550#isolate-the-outstanding-webp-boundary-costs) | For one GIF hold split into `s` records of `N` pixels and `L` compressed bytes, writer-owned replay can avoid `(s−1) × N` uploaded index bytes on the JS-index fallback, and `(s−1) × L` repeated reads of WASM output on either route. The writer still emits all records. Report the Rust mapper's internal passes separately. | Compare the same delays, palettes and decoded output, memory admission and Stop/retry. For software VP8, record input copies and borrowed output lifetime. For native WebP, time Worker and GPU handoff independently. [Landed GIF evidence](https://github.com/PiesP/wasm-motion-converter/issues/550#issuecomment-7077100874) · [Hardware WebP comparison](https://github.com/PiesP/wasm-motion-converter/issues/550#issuecomment-7085332456) |
+| [Overlay #478](https://github.com/PiesP/yt-live-chat-overlay/issues/478#placement-boundary-experiment) and [#481](https://github.com/PiesP/yt-live-chat-overlay/issues/481#paragraph-abi-and-measurement) | Replay identical geometry revisions, candidate order and decisions to compare repeated full upload, a reusable snapshot or changed slots, and the TS control. For ordinary bidi text, first improve TS, then compare one request per new or revised paragraph. Send grapheme representatives and line ranges; return levels and indices. | Preserve the 4 ms yield budget, 32-attempt limit and per-message first display including pending messages. Measure installed Worker and userscript Main separately. The original four-run WASM arm made 54,231 batches and uploaded 34,802,496 bytes; the copy control did different work. [Installed comparison](https://github.com/PiesP/yt-live-chat-overlay/issues/477#issuecomment-7074966339) |
+| [Gallery #553](https://github.com/PiesP/xcom-enhanced-gallery/issues/553#implementation-trial-for-the-crc-boundary) and [#559](https://github.com/PiesP/xcom-enhanced-gallery/issues/559#boundary-experiment-for-item-4) | Keep the immutable ZIP member Blob. Compare serial optimized JS CRC with one admitted staging copy per slice and a synchronous `crc_update(previous, ptr, len) -> u32`. Keep the running CRC per member and lease scratch only for the synchronous copy and call. For GraphQL, profile parsed-only JS first. A Rust trial accepts bounded UTF-8 and returns only the requested post/direct-quote projection. | Charge stream scratch and resident WASM memory together. On the three-video workload, one full input upload would cost 68,626,483 bytes. Compare native saves and final Blob timing with identical inputs. For parsing, include input/output copies, materialization and downstream cache work in time to first usable tile. [CRC measurements](https://github.com/PiesP/xcom-enhanced-gallery/issues/553#issuecomment-7085463289) |
+
+<details>
+<summary>Reproduce the byte-stream and WASM view lifetime check</summary>
+
+Run the following in a disposable browser console or a Node ES module. Each read uses a new Blob stream. The ordinary read verifies the destination API on this runtime before testing the WASM view. This checks ownership semantics; use the installed product for timing and peak memory.
+
+```js
+async function readInto(view) {
+  const reader = new Blob([Uint8Array.of(7, 11, 13, 17)])
+    .stream().getReader({ mode: 'byob' });
+  try {
+    const { value } = await reader.read(view);
+    return { bytes: Array.from(value), returnedCapacity: value.buffer.byteLength };
+  } finally {
+    reader.releaseLock();
+  }
+}
+
+const input = new ArrayBuffer(65536);
+const ordinary = await readInto(new Uint8Array(input, 2, 4));
+const memory = new WebAssembly.Memory({ initial: 1, maximum: 2 });
+const oldView = new Uint8Array(memory.buffer, 2, 4);
+oldView.set([7, 11, 13, 17]);
+let wasmRead;
+try {
+  wasmRead = await readInto(oldView);
+} catch (error) {
+  wasmRead = error.name;
+}
+memory.grow(1);
+console.log(JSON.stringify({
+  ordinary, inputCapacityAfterRead: input.byteLength, wasmRead,
+  oldViewBytes: oldView.byteLength,
+  refreshedBytes: Array.from(new Uint8Array(memory.buffer, 2, 4))
+}));
+```
+
+On Node 24.22.3, the ordinary read returned the four original bytes and a 65,536-byte backing. Its original buffer had length zero. The default fixed-length WASM view produced `TypeError` on the BYOB read. After growth, the old view had length zero and a fresh view read the original four bytes. A converter destination accepted by `VideoFrame.copyTo()` and a stream destination accepted by a BYOB reader have different ownership contracts. [Streams pull-into algorithm](https://streams.spec.whatwg.org/#readable-byte-stream-controller-pull-into) · [WebAssembly JS memory buffers](https://webassembly.github.io/spec/js-api/#create-a-fixed-length-memory-buffer)
+
+</details>
 
 ### Decisions and completion
 
